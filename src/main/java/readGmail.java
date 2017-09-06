@@ -50,12 +50,15 @@ public class readGmail{
 
 
         for (Message msg : messages) {
-
-            if (msg.getSubject()!=null){
+            //System.out.println(msg.getSubject());
+            if(msg.getSubject()!=null) {
                 String[] parts = msg.getSubject().split(" ");
-                for(String str : parts){
-                    if (str.equals("ill")){
-                        numberOfIllness+=1;
+
+                for (String str : parts) {
+                    str = str.toLowerCase();
+                    if (str.equals("ill") && (!msg.isSet(Flags.Flag.SEEN))) {
+                        msg.setFlag(Flags.Flag.SEEN, true);
+                        numberOfIllness += 1;
                         com.google.api.services.calendar.Calendar service =
                                 b.getCalendarService();
 
@@ -78,11 +81,16 @@ public class readGmail{
                         event = service.events().insert(calendarId, event).execute();
                         System.out.printf("Event created: %s\n", event.getHtmlLink());
                     }
-            }
-
-
+                }
 
             }
+
+
+
+
+                //folder.close(false);
+                //store.close();
+
 
             //if((msg.getSubject().equals("I'm ill")) && (msg.getSubject() != null)) {
             //numberOfIllness += 1;
