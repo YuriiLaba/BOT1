@@ -3,6 +3,8 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 import javax.mail.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class readGmail{
@@ -23,7 +25,7 @@ public class readGmail{
     }
 
 
-    public static void setProperties() throws MessagingException {
+    public void setProperties() throws MessagingException {
         Properties props = new Properties();
         //props.put("mail.store.protocol", "imaps");
         props.put(protocolForRetrievingData, messageAccessProtocol);
@@ -34,7 +36,9 @@ public class readGmail{
         store.connect(host,email, password);
     }
 
-    public static void model() throws Exception {
+    public List<Integer> model() throws Exception {
+        List<Integer> list = new ArrayList<Integer>();
+        int numberOfIllness = 0;
         writeGmail b = new writeGmail();
         Folder folder = store.getFolder("Inbox");
 
@@ -51,6 +55,7 @@ public class readGmail{
                 String[] parts = msg.getSubject().split(" ");
                 for(String str : parts){
                     if (str.equals("ill")){
+                        numberOfIllness+=1;
                         com.google.api.services.calendar.Calendar service =
                                 b.getCalendarService();
 
@@ -68,9 +73,6 @@ public class readGmail{
                         EventDateTime end = new EventDateTime()
                                 .setDateTime(endDateTime);
                         event.setEnd(end);
-
-
-
 
                         String calendarId = email;
                         event = service.events().insert(calendarId, event).execute();
@@ -97,7 +99,9 @@ public class readGmail{
             //System.out.println(msg.getContentType());
             //Calendar beginTime = Calendar.getInstance();
         }
-
-
+        list.add(numberOfIllness);
+        list.add(folder.getMessageCount());
+        list.add(folder.getMessageCount()-numberOfIllness);
+        return list;
     }
 }

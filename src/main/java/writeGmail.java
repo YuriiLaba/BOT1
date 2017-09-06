@@ -8,10 +8,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.client.util.DateTime;
 
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +20,7 @@ import java.util.List;
 public class writeGmail {
     /** Application name. */
     private static final String APPLICATION_NAME =
-            "Google Calendar API Java Quickstart";
+            "Google Calendar BOT";
 
     /** Directory to store user credentials for this application. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
@@ -87,7 +85,7 @@ public class writeGmail {
      * @return an authorized Calendar client service
      * @throws IOException
      */
-    public static com.google.api.services.calendar.Calendar
+    public com.google.api.services.calendar.Calendar
     getCalendarService() throws Exception {
         Credential credential = authorize();
         return new com.google.api.services.calendar.Calendar.Builder(
