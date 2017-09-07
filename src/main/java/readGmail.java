@@ -67,7 +67,9 @@ public class readGmail{
                         str = str.toLowerCase();
                         if (str.equals(wrds)&&(count==0)) {
                             count+=1;
+                            //System.out.println("Body: \n"+ msg.getContent());
                             msg.setFlag(Flags.Flag.SEEN, true);
+                            //msg.setFlag(Flags.Flag.DELETED, true);
                             numberOfIllness += 1;
                             com.google.api.services.calendar.Calendar service =
                                     writeGmailBOT.getCalendarService();
@@ -114,7 +116,7 @@ public class readGmail{
             //System.out.println("Date: "+msg.getReceivedDate());
             //System.out.println("Size: "+msg.getSize());
             //System.out.println(msg.getFlags());
-            //System.out.println("Body: \n"+ msg.getContent());
+
             //System.out.println(msg.getContentType());
             //Calendar beginTime = Calendar.getInstance();
         }

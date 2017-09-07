@@ -1,0 +1,4 @@
+mail.store.protocol 
+imaps imap.googlemail.com
+apostollmatt9@gmail.com
+Slayer41
