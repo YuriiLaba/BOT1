@@ -3,6 +3,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import javax.mail.Message;
 
+
 public class EventManager {
 
     public WriterAuthentication writerAuthentication;
