@@ -1,33 +1,40 @@
 import org.junit.Test;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.Message;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class tests {
-    @Test
-    public void numberOfIllness() throws Exception {
-        readGmail a = new readGmail("mail.store.protocol","imaps",
-                "imap.googlemail.com","apostollmatt9@gmail.com", "Slayer41");
-        List<Integer> list1 = a.model();
-        int b = list1.get(0);
-        assertEquals(3, b);
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testConfigFileIntegrity() {
+        FileReader configFile = new FileReader();
+        configFile.openFile();
+        List<String> configResult = configFile.readFile();
+        new ReaderConfig(configResult.get(0),configResult.get(1),
+                configResult.get(2),configResult.get(3),configResult.get(4));
     }
-    @Test
-    public void numberOfLetters() throws Exception {
-        readGmail a = new readGmail("mail.store.protocol","imaps",
-                "imap.googlemail.com","apostollmatt9@gmail.com", "Slayer41");
-        List<Integer> list1 = a.model();
-        int b = list1.get(1);
-        assertEquals(7, b);
+
+    @Test(expected = AuthenticationFailedException.class)
+    public void testAuthentication() throws Exception {
+        FileReader configFile = new FileReader();
+        configFile.openFile();
+        List<String> configResult = configFile.readFile();
+
+        ReaderConfig readerConfig = new ReaderConfig(configResult.get(0),configResult.get(1),
+                configResult.get(2),configResult.get(3),configResult.get(4));
+
+        ReaderAuthentication readerAuthentication = new ReaderAuthentication(readerConfig);
+        GmailReader gmailReader = new GmailReader(readerConfig, readerAuthentication);
+        ArrayList<Message> lstOfIllPeople = gmailReader.model();
+        for(int i = 0; i<lstOfIllPeople.size(); i++){
+            WriterAuthentication writerAuthentication = new WriterAuthentication();
+            EventManager newEvent = new EventManager(writerAuthentication, lstOfIllPeople.get(i));
+            newEvent.eventCreator();
+        }
     }
-    @Test
-    public void differentLetters() throws Exception {
-        readGmail a = new readGmail("mail.store.protocol","imaps",
-                "imap.googlemail.com","apostollmatt9@gmail.com", "Slayer41");
-        List<Integer> list1 = a.model();
-        int b = list1.get(2);
-        assertEquals(4, b);
-    }
+
 
 }

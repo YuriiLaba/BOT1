@@ -1,4 +1,5 @@
-mail.store.protocol 
-imaps imap.googlemail.com
-apostollmatt9@gmail.com
-Slayer41
+ProtocolForRetrievingEmail = mail.store.protocol 
+InternetStandardProtocol = imaps
+Host = imap.googlemail.com
+Email = apostollmatt9@gmail.com	
+Password = Slayer41

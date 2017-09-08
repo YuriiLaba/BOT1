@@ -3,11 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ReadFile {
-    private Scanner x;
+public class FileReader {
+    private Scanner scannerFile;
     public void openFile(){
         try{
-            x = new Scanner(new File("temp.txt"));
+            scannerFile = new Scanner(new File("temp.txt"));
 
         } catch (Exception e) {
             System.out.println("could no find file");
@@ -15,11 +15,18 @@ public class ReadFile {
     }
 
     public List<String> readFile(){
+        int i = 0;
         ArrayList<String> config = new ArrayList<String>();
-        while (x.hasNext()){
-            String a = x.next();
-            config.add(a);
+        while (scannerFile.hasNext()){
+            i++;
+            String a = scannerFile.next();
+            if(i == 3){
+                config.add(a);
+                i = 0;
+            }
         }
+
         return config;
+
     }
 }
