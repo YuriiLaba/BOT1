@@ -50,6 +50,10 @@ public class GmailReader{
                 for(String wrds: illWords){
                     for (String str : parts) {
                         str = str.toLowerCase();
+                        str = str.replace(",", "");
+                        str = str.replace(".", "");
+                        str = str.replace(";", "");
+                        str = str.replace(":", "");
                         if (numberOfWordsRepetition(str, wrds, count)) {
                             count+=1;
                             msg.setFlag(Flags.Flag.SEEN, true);
