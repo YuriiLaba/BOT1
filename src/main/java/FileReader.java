@@ -17,11 +17,9 @@ public class FileReader {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                String[] tempListOfSplitedLines = sCurrentLine.split(" = ");
-                configList.add(tempListOfSplitedLines[tempListOfSplitedLines.length - 1]);
-
+                String[] tempListOfSplittedLines = sCurrentLine.split(" = ");
+                configList.add(tempListOfSplittedLines[tempListOfSplittedLines.length - 1]);
             }
-
         }
         catch (IOException e) {
 

@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class GmailReader{
     public ReaderConfig readerConfig;
     public ReaderAuthentication readerAuthentication;
-    ArrayList<Message> messageArrayList = new ArrayList<Message>();
+
 
     public GmailReader(ReaderConfig readerConfig, ReaderAuthentication readerAuthentication) {
         this.readerConfig = readerConfig;
@@ -24,6 +24,7 @@ public class GmailReader{
     }
 
     public ArrayList<Message> model() throws Exception {
+        ArrayList<Message> messageArrayList = new ArrayList<Message>();
 
         ArrayList<String> illWords = new ArrayList<String>(
                 Arrays.asList("ill","illness", "disease", "sickness", "infection",
