@@ -6,8 +6,8 @@ public class BOTcenter {
 
     public static void main(String[] args) throws Exception {
         FileReader configFile = new FileReader();
-        configFile.openFile();
-        List<String> configResult = configFile.readFile();
+        //configFile.openFile();
+        List<String> configResult = configFile.readFile("temp.txt");
         //System.out.println(configResult.get(0));
         //System.out.println(configResult.get(1)) ;
         //configFile.readFile();
