@@ -1,5 +1,5 @@
-Protocol For Retrieving Email = mail.store.protocol 
-Internet Standard Protocol = imaps
+ProtocolForRetrievingEmail = mail.store.protocol 
+InternetStandardProtocol = imaps
 Host = imap.googlemail.com
 Email = apostollmatt9@gmail.com	
 Password = Slayer41

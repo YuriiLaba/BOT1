@@ -2,6 +2,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import javax.mail.Message;
+import java.util.Date;
 
 
 public class EventManager {
@@ -16,19 +17,19 @@ public class EventManager {
 
 
 
-    public void eventCreator() throws Exception {
+    public void eventCreator(Date startEvent, Date endEvent, String eventName) throws Exception {
         com.google.api.services.calendar.Calendar service =
                 writerAuthentication.getCalendarService();
         Event event = new Event()
-                .setSummary(String.valueOf(msg.getFrom()[0]));
+                .setSummary(eventName + ": "+ String.valueOf(msg.getFrom()[0]));
 
 
-        DateTime startDateTime = new DateTime(msg.getReceivedDate());
+        DateTime startDateTime = new DateTime(startEvent);
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime);
         event.setStart(start);
 
-        DateTime endDateTime = new DateTime(msg.getReceivedDate());
+        DateTime endDateTime = new DateTime(endEvent);
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime);
         event.setEnd(end);

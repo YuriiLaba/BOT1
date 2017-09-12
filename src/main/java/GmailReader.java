@@ -1,9 +1,17 @@
-import javax.mail.*;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
-public class GmailReader{
+public class GmailReader {
     public ReaderConfig readerConfig;
     public ReaderAuthentication readerAuthentication;
 
@@ -15,77 +23,100 @@ public class GmailReader{
     }
 
 
-
     public boolean subjectAndSeenChecker(Message msg) throws MessagingException {
-        return (msg.getSubject()!= null)&&(!msg.isSet(Flags.Flag.SEEN));
-    }
-    public boolean numberOfWordsRepetition(String str, String wrds, int count){
-        return str.equals(wrds)&&(count==0);
+        return (msg.getSubject() != null) && (!msg.isSet(Flags.Flag.SEEN));
     }
 
-    public ArrayList<Message> model() throws Exception {
-        ArrayList<Message> messageArrayList = new ArrayList<Message>();
+    public boolean numberOfWordsRepetition(String str, String words, int count) {
+        return str.equals(words) && (count == 0);
+    }
 
-        ArrayList<String> illWords = new ArrayList<String>(
-                Arrays.asList("ill","illness", "disease", "sickness", "infection",
+    public ArrayList<Date> dataParser(String start, String end) throws ParseException {
+        ArrayList<Date> datesOfVacation = new ArrayList<Date>();
+        String pattern = "dd/MM/yyyy";
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        Date startVacation = format.parse(start);
+        Date endVacation = format.parse(end);
+        datesOfVacation.add(startVacation);
+        datesOfVacation.add(endVacation);
+        return datesOfVacation;
+    }
+
+    public String stringCleaner(String str) {
+        str = str.toLowerCase();
+        str = str.replace(",", "");
+        str = str.replace(".", "");
+        str = str.replace(";", "");
+        str = str.replace(":", "");
+
+        return str;
+    }
+
+    public String[] getDate(String description) {
+        int count = 0;
+        String[] allMatches = new String[2];
+        Matcher match =
+                Pattern.compile("(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d").matcher(description);
+        while (match.find()) {
+            allMatches[count] = match.group();
+            count++;
+        }
+        return allMatches;
+    }
+
+
+    public void analyse() throws Exception {
+
+
+        ArrayList<String> searchWords = new ArrayList<String>(
+                Arrays.asList("ill", "illness", "disease", "sickness", "infection",
                         "disorder", "complaint", "ailment", "contagion"));
 
 
-
-
-
         Folder folder = readerAuthentication.readerConnection().getFolder("Inbox");
-        if(!folder.isOpen())
+        if (!folder.isOpen()) {
             folder.open(Folder.READ_WRITE);
-
+        }
         Message[] messages = folder.getMessages();
 
-
         for (Message msg : messages) {
-            int count = 0;
-            if(subjectAndSeenChecker(msg)) {
+            int vocationCount = 0;
+            int illnessCount = 0;
+
+            if (subjectAndSeenChecker(msg)) {
 
                 String[] parts = msg.getSubject().split(" ");
-
-                for(String wrds: illWords){
+                try {
                     for (String str : parts) {
-                        str = str.toLowerCase();
-                        str = str.replace(",", "");
-                        str = str.replace(".", "");
-                        str = str.replace(";", "");
-                        str = str.replace(":", "");
-                        if (numberOfWordsRepetition(str, wrds, count)) {
-                            count+=1;
-                            msg.setFlag(Flags.Flag.SEEN, true);
-                            messageArrayList.add(msg);
+                        str = stringCleaner(str);
+                        if (numberOfWordsRepetition(str, "leave", vocationCount)) {
+                            vocationCount += 1;
+                            //msg.setFlag(Flags.Flag.SEEN, true);
+                            String[] dates = getDate(msg.getSubject());
+                            ArrayList<Date> parsedDates = dataParser(dates[0], dates[1]);
+                            WriterAuthentication writerAuthentication = new WriterAuthentication();
+                            EventManager newEvent = new EventManager(writerAuthentication, msg);
+                            newEvent.eventCreator(parsedDates.get(0), parsedDates.get(1), "Vacation");
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Bad Date Format");
+                }
 
+                for (String words : searchWords) {
+                    for (String str : parts) {
+                        str = stringCleaner(str);
+                        if (numberOfWordsRepetition(str, words, illnessCount)) {
+                            illnessCount += 1;
+                            //msg.setFlag(Flags.Flag.SEEN, true);
+                            WriterAuthentication writerAuthentication = new WriterAuthentication();
+                            EventManager newEvent = new EventManager(writerAuthentication, msg);
+                            newEvent.eventCreator(msg.getReceivedDate(), msg.getReceivedDate(), "Illness");
                         }
                     }
                 }
             }
-
-
-            //folder.close(false);
-            //store.close();
-
-
-            //if((msg.getSubject().equals("I'm ill")) && (msg.getSubject() != null)) {
-            //numberOfIllness += 1;
-            //}
-            //System.out.println("Subject: " + msg.getSubject());
-            //System.out.println(numberOfIllness);
-
-            //System.out.println("From: " + msg.getFrom()[0]);
-            //System.out.println("To: "+msg.getAllRecipients()[0]);
-            //System.out.println("Date: "+msg.getReceivedDate());
-            //System.out.println("Size: "+msg.getSize());
-            //System.out.println(msg.getFlags());
-
-            //System.out.println(msg.getContentType());
-            //Calendar beginTime = Calendar.getInstance();
-
-        }return messageArrayList;
-
+        }
     }
 }
 
