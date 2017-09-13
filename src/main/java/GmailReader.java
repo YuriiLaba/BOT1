@@ -94,9 +94,15 @@ public class GmailReader {
                             //msg.setFlag(Flags.Flag.SEEN, true);
                             String[] dates = getDate(msg.getSubject());
                             ArrayList<Date> parsedDates = dataParser(dates[0], dates[1]);
-                            WriterAuthentication writerAuthentication = new WriterAuthentication();
-                            EventManager newEvent = new EventManager(writerAuthentication, msg);
-                            newEvent.eventCreator(parsedDates.get(0), parsedDates.get(1), "Vacation");
+                            long diff = parsedDates.get(1).getTime() - parsedDates.get(0).getTime();
+                            long diffDays = diff / (60 * 60 * 1000)/24;
+                            if(diffDays <= 14){
+                                WriterAuthentication writerAuthentication = new WriterAuthentication();
+                                EventManager newEvent = new EventManager(writerAuthentication, msg);
+                                newEvent.eventCreator(parsedDates.get(0), parsedDates.get(1), "Vacation");
+                            } else{
+                                System.out.println("Too long vacation: you don't deserve it");
+                            }
                         }
                     }
                 } catch (NullPointerException e) {

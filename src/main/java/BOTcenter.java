@@ -18,8 +18,10 @@ public class BOTcenter {
 
         ReaderAuthentication readerAuthentication = new ReaderAuthentication(readerConfig);
         GmailReader gmailReader = new GmailReader(readerConfig, readerAuthentication);
-        gmailReader.analyse();
-
-
+        try {
+            gmailReader.analyse();
+        }catch (javax.mail.MessagingException messagingEx){
+            System.out.println("Couldn't connect: " + messagingEx.toString());
+        }
     }
 }
