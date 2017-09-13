@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 public class GmailReader {
     public ReaderConfig readerConfig;
     public ReaderAuthentication readerAuthentication;
+    public ArrayList<String> checkList = new ArrayList<String>();
 
 
     public GmailReader(ReaderConfig readerConfig, ReaderAuthentication readerAuthentication) {
@@ -64,6 +65,12 @@ public class GmailReader {
         return allMatches;
     }
 
+    public ArrayList<String> getCheckList() {
+        return checkList;
+    }
+
+
+
 
     public void analyse() throws Exception {
 
@@ -102,11 +109,13 @@ public class GmailReader {
                                 newEvent.eventCreator(parsedDates.get(0), parsedDates.get(1), "Vacation");
                             } else{
                                 System.out.println("Too long vacation: you don't deserve it");
+                                checkList.add("Too long vacation: you don't deserve it");
                             }
                         }
                     }
                 } catch (NullPointerException e) {
                     System.out.println("Bad Date Format");
+                    checkList.add("Bad Date Format");
                 }
 
                 for (String words : searchWords) {
