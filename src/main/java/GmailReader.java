@@ -4,13 +4,11 @@ import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.EmptyStackException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +16,7 @@ import java.util.regex.Pattern;
 public class GmailReader {
     public ReaderConfig readerConfig;
     public ReaderAuthentication readerAuthentication;
-    public ArrayList<String> checkList = new ArrayList<String>();
+
 
 
     public GmailReader(ReaderConfig readerConfig, ReaderAuthentication readerAuthentication) {
