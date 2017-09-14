@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class GmailReader {
     public ReaderConfig readerConfig;
     public ReaderAuthentication readerAuthentication;
+    public static String EMAIL_MATCHER = "(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d";
 
 
 
@@ -69,34 +70,28 @@ public class GmailReader {
     }
 
     public String stringCleaner(String str) {
-        str = str.toLowerCase();
-        str = str.replace(",", "");
-        str = str.replace(".", "");
-        str = str.replace(";", "");
-        str = str.replace(":", "");
+        str = str.toLowerCase()
+                .replace(",", "")
+                .replace(".", "")
+                .replace(";", "")
+                .replace(":", "");
 
         return str;
     }
 
     public String[] getDate(String description) throws invalidDateInformationException {
         int count = 0;
-        int i = 0;
         String[] allMatches = new String[2];
         Matcher match =
-                Pattern.compile("(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d").matcher(description);
+                Pattern.compile(EMAIL_MATCHER).matcher(description);
+        try{
         while (match.find()) {
-
-
-            if (i == 2){
-                throw new invalidDateInformationException("Looks like you don't follow our " +
-                        " template: try again");
-            }
             allMatches[count] = match.group();
             count++;
-            i++;
-
-
-
+        }
+        }catch(IndexOutOfBoundsException e){
+            throw new invalidDateInformationException("Looks like you don't follow our " +
+                    " template: try again");
         }
         return allMatches;
     }

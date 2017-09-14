@@ -2,10 +2,8 @@ import org.junit.Test;
 import javax.mail.AuthenticationFailedException;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Properties;
 
-import static org.junit.Assert.assertEquals;
 
 public class Tests {
 
