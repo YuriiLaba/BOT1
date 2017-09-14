@@ -124,10 +124,10 @@ public class GmailReader {
                         str = stringCleaner(str);
                         if (numberOfWordsRepetition(str, "leave", vocationCount)) {
                             vocationCount += 1;
-                            //msg.setFlag(Flags.Flag.SEEN, true);
+                            msg.setFlag(Flags.Flag.SEEN, true);
                             String[] dates = getDate(msg.getSubject());
                             Date now = new Date();
-                            if((dates[0] == null)&&dates[1] == null){
+                            if((dates[0] == null)||dates[1] == null){
                                 throw new invalidDateFormatException("Invalid Data Format:" +
                                         " type like this dd/MM/yyyy");
                             }
@@ -155,7 +155,7 @@ public class GmailReader {
                         str = stringCleaner(str);
                         if (numberOfWordsRepetition(str, words, illnessCount)) {
                             illnessCount += 1;
-                            //msg.setFlag(Flags.Flag.SEEN, true);
+                            msg.setFlag(Flags.Flag.SEEN, true);
                             WriterAuthentication writerAuthentication = new WriterAuthentication();
                             EventManager newEvent = new EventManager(writerAuthentication, msg);
                             newEvent.eventCreator(msg.getReceivedDate(), msg.getReceivedDate(), "Illness");
