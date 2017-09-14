@@ -127,7 +127,8 @@ public class GmailReader {
                             //msg.setFlag(Flags.Flag.SEEN, true);
                             String[] dates = getDate(msg.getSubject());
                             Date now = new Date();
-                            if((dates[0] == null)&&dates[1] == null){
+                            System.out.println(dates[0]);
+                            if((dates[0] == null)||dates[1] == null){
                                 throw new invalidDateFormatException("Invalid Data Format:" +
                                         " type like this dd/MM/yyyy");
                             }
