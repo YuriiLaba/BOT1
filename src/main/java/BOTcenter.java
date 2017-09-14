@@ -1,16 +1,27 @@
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class BOTcenter {
+
     public static void main(String[] args) throws Exception {
-    //readGmail gmailBOT = new readGmail("mail.store.protocol","imaps",
-            //"imap.googlemail.com","apostollmatt9@gmail.com", "Slayer41");
 
+        Properties prop = new Properties();
+        InputStream input;
+        input = new FileInputStream("temp.txt");
 
-    ReadFile configFile = new ReadFile();
-    configFile.openFile();
-    List<String> configResult = configFile.readFile();
-    readGmail gmailBOT = new readGmail(configResult.get(0),configResult.get(1),
-            configResult.get(2),configResult.get(3), configResult.get(4));
-    gmailBOT.model();
+        prop.load(input);
+
+        ReaderConfig readerConfig = new ReaderConfig(prop.getProperty("ProtocolForRetrievingEmail"),
+                prop.getProperty("InternetStandardProtocol"),
+                prop.getProperty("Host"),prop.getProperty("Email"),prop.getProperty("Password"));
+
+        ReaderAuthentication readerAuthentication = new ReaderAuthentication(readerConfig);
+        GmailReader gmailReader = new GmailReader(readerConfig, readerAuthentication);
+        try {
+            gmailReader.analyse();
+        }catch (javax.mail.MessagingException messagingEx){
+            System.out.println("Couldn't connect: " + messagingEx.toString());
+        }
     }
 }

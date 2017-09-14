@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-public class writeGmail {
+public class WriterAuthentication {
     /** Application name. */
     private static final String APPLICATION_NAME =
             "Google Calendar BOT";
@@ -62,7 +62,7 @@ public class writeGmail {
     public static Credential authorize() throws Exception {
         // Load client secrets.
         InputStream in =
-                writeGmail.class.getResourceAsStream("/client_secret.json");
+                WriterAuthentication.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -76,7 +76,7 @@ public class writeGmail {
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
         //System.out.println(
-                //"Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+        //"Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }
 
